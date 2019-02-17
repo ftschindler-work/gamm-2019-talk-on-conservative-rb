@@ -1,0 +1,19 @@
+cd $HOME
+source .bashrc
+
+cd $HOME/gamm-2019-talk-on-conservative-rb/environments/arch-full
+source PATH.sh
+cd $HOME/gamm-2019-talk-on-conservative-rb/dune-gdt/examples
+
+echo "This is a container based on archlinux"
+echo "the current user is sudo pacman capable."
+echo "Visit https://www.archlinux.org/ for more information."
+echo ""
+echo "To reproduce the results, go to"
+echo ""
+echo "  /home/user/gamm-2019-talk-on-conservative-rb/dune-gdt/examples
+echo ""
+echo "and execute"
+echo ""
+echo "  run-in-dune-env ipython ./gamm-2019-talk-on-conservative-rb-OS2015-multiscale-example.py"
+
