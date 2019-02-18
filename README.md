@@ -1,63 +1,20 @@
 ```
-# This file is part of the dune-gdt-super project:
-#   https://github.com/dune-community/dune-gdt-super
+# This file is part of the ftschindler-work/gamm-2019-talk-on-conservative-rb project:
+#   https://github.com/ftschindler-work/gamm-2019-talk-on-conservative-rb
 # The copyright lies with the authors of this file (see below).
 # License: BSD 2-Clause License (http://opensource.org/licenses/BSD-2-Clause)
 ```
 
-dune-gdt-super is a git supermodule which serves as a demonstration and testing
-module for [dune-gdt](https://github.com/dune-community/dune-gdt). This module
-provides the correct versions of all relevant [DUNE](http://www.dune-project.org)
-modules and external libraries as git submodules.
+This repository contains the companion software for the talk
 
-In order to build everything, do the following:
+  __Localization and mass conservation in reduced basis methods__
 
-* Initialize all submodules:
+held by Felix Schindler ([felixschindler.net](http://felixschindler.net)) on
+Feb. 18th 2019 on the [90th GAMM Annual](https://www.conftool.pro/gamm2019/index.php?page=browseSessions&form_session=217&presentations=hide) [Meeting in Vienna](https://jahrestagung.gamm-ev.de/index.php/2019/2019-annual-meeting).
 
-  ```
-  git submodule update --init --recursive
-  ```
-  
-* Take a look at `config.opts/` and find settings and a compiler which suits your
-  system, e.g. `config.opts/gcc-debug`. Select one of those options by defining
-  
-  ```
-  export OPTS=gcc-debug
-  ```
-  If you have the `ninja` generator installed we recommend to make use of it by
-  selecting `OPTS=gcc-debug.ninja`, which usually speeds up builds significantly.
-  
-* Call
+If you are interested in reproducing the results, we recommend to use the
+accompanying [docker image](https://cloud.docker.com/u/ftschindlerwork/repository/docker/ftschindlerwork/gamm-2019-talk-on-conservative-rb):
 
-  ```
-  ./local/bin/gen_path.py
-  ```
-  
-  to generate a file `PATH.sh` which defines a local build environment. From now 
-  on you should source this file whenever you plan to work on this project, e.g.:
-  
-  ```
-  source PATH.sh
-  ```
-
-* Download and build all external libraries by calling (this _might_ take some time):
-
-  ```
-  ./local/bin/download_external_libraries.py
-  ./local/bin/build_external_libraries.py
-  ```
-  
-* Build all DUNE modules using `cmake` and the selected options (this _will_ take
-  some time):
-
-  ```
-  ./dune-common/bin/dunecontrol --opts=config.opts/$OPTS --builddir=$PWD/build-$OPTS all
-  ```
-  
-  This creates a directory corresponding to the selected options (e.g. `build-gcc-debug`)
-  which contains a subfolder for each DUNE module. See the `dune/gdt/test` subfolder for
-  tests, e.g.,
-  
-  ```
-  build-gcc-debug/dune-gdt/dune/gdt/test/
-  ```
+```
+docker run -it ftschindlerwork/gamm-2019-talk-on-conservative-rb
+```
