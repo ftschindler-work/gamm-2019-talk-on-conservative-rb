@@ -33,6 +33,7 @@ RUN ./strip.sh
 
 ADD home.tgz /data/home/
 ADD bashrc /data/home/.bashrc
+ADD bash_profile /data/home/.bash_profile
 ADD rebuild-dune.sh /data/dune/
 RUN chown -R ${USERNAME_}:${USERNAME_} /data
 
