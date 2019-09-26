@@ -5,11 +5,8 @@
 # The copyright lies with the authors of this file (see below).
 # License: BSD 2-Clause License (http://opensource.org/licenses/BSD-2-Clause)
 
-export LANG=en_US.UTF-8
-echo "127.0.0.1 ${HOSTNAME}" >> /etc/hosts
+export NOTEBOOK_PATH=$PWD/notebooks
+export NOTEBOOK_PORT=${EXPOSED_PORT:-18881}
 
-if [ "X$@" == "X" ]; then
-  exec gosu $USERNAME_ /bin/bash
-else
-  exec gosu $USERNAME_ "$@"
-fi
+jupyter-notebook --ip 0.0.0.0 --no-browser --notebook-dir=$NOTEBOOK_PATH --port=$NOTEBOOK_PORT
+

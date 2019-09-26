@@ -5,11 +5,7 @@
 # The copyright lies with the authors of this file (see below).
 # License: BSD 2-Clause License (http://opensource.org/licenses/BSD-2-Clause)
 
-export LANG=en_US.UTF-8
-echo "127.0.0.1 ${HOSTNAME}" >> /etc/hosts
+CID_FILE=/tmp/ftschindler-work-gamm-2019-talk-on-conservative-rb.cid
 
-if [ "X$@" == "X" ]; then
-  exec gosu $USERNAME_ /bin/bash
-else
-  exec gosu $USERNAME_ "$@"
-fi
+sudo docker exec -it $(cat ${CID_FILE}) gosu $USER /bin/bash
+

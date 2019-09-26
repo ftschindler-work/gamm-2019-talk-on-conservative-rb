@@ -1,35 +1,40 @@
-FROM dunecommunity/arch-full-interactive
+# This file is part of the ftschindler-work/gamm-2019-talk-on-conservative-rb project:
+#   https://github.com/ftschindler-work/gamm-2019-talk-on-conservative-rb
+# The copyright lies with the authors of this file (see below).
+# License: BSD 2-Clause License (http://opensource.org/licenses/BSD-2-Clause)
+
+FROM dunecommunity/debian-qtcreator
 
 MAINTAINER Felix Schindler <felix.schindler@wwu.de>
 
-RUN pacman -Syyuu --noconfirm
+RUN mkdir -p /data/home
+ENV USERNAME_ user
+ENV UID_ 1000
+ENV GID_ 1000
+RUN groupadd -g $GID_ $USERNAME_ && \
+    useradd -d /data/home -g $GID_ -s /bin/bash -u $UID_ $USERNAME_ && \
+    echo "$USERNAME_ ALL=(ALL) NOPASSWD:/usr/bin/apt-get" >> /etc/sudoers && \
+    echo "$USERNAME_ ALL=(ALL) NOPASSWD:/usr/bin/apt" >> /etc/sudoers && \
+    echo "$USERNAME_ ALL=(ALL) NOPASSWD:/usr/bin/dpkg" >> /etc/sudoers
 
-RUN export USERNAME_=user && \
-    export UID_=1000 && \
-    export GID_=$UID_ && \
-    groupadd -g $GID_ $USERNAME_ && \
-    useradd -md /home/$USERNAME_ -g $GID_ -s /bin/bash -u $UID_ $USERNAME_ && \
-    chown -R $USERNAME_:$GID_ /home/$USERNAME_ && \
-    echo "$USERNAME_ ALL=(ALL) NOPASSWD:/usr/bin/pacman" >> /etc/sudoers
-
-ADD mkimage-*.sh /home/user/
-RUN chown -R user:user /home/user
-
-USER user
-WORKDIR /home/user
 ENV LANG en_US.UTF-8
-RUN bash mkimage-01-prepare.sh && \
-    bash mkimage-02-build-dune.sh && \
-    rm -f /home/user/mkimage-*.sh
+WORKDIR /data/home
+RUN git clone https://github.com/ftschindler-work/gamm-2019-talk-on-conservative-rb.git && \
+    cd gamm-2019-talk-on-conservative-rb && \
+    git submodule update --init --recursive
 
-USER root
-ADD bashrc /home/user/.bashrc
-ADD bash_profile /home/user/.bash_profile
-RUN chown -R user:user /home/user
+RUN mkdir -p /data/dune
+ADD setup.sh /data/dune/
+ADD PATH.sh /data/dune/
+WORKDIR /data/dune
+RUN ./setup.sh
+ADD strip.sh /data/dune/
+RUN ./strip.sh
 
-# clean up, there might be some leftovers
-RUN pacman -Rns --noconfirm $(pacman -Qtdq) || echo "no orphans present" && \
-    pacman -Sc --noconfirm
+ADD home.tgz /data/home/
+ADD bashrc /data/home/.bashrc
+ADD rebuild-dune.sh /data/dune/
+RUN chown -R ${USERNAME_}:${USERNAME_} /data
 
 ADD entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
